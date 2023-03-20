@@ -20,6 +20,7 @@ import sys
 import threading
 import time
 import random
+import os
 
 with atheris.instrument_imports():
     import urllib3
@@ -120,8 +121,17 @@ def TestOneInput(input_bytes):
 
 
 if __name__ == "__main__":
-    x = threading.Thread(target=run_webserver, daemon=True)
-    x.start()
+    global PORT
+    # Try and get an open port to run our test web server
+    # We get crashes when fuzzing without this logic
+    for attempt in range(10):
+        try:
+            PORT = random.randint(8000,9999)
+            x = threading.Thread(target=run_webserver, daemon=True)
+            x.start()
+            break
+        except OSError as e:
+            pass 
 
     time.sleep(0.5)  # Short delay to start test server
     
