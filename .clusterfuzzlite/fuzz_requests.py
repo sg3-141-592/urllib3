@@ -19,6 +19,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import sys
 import threading
 import time
+import random
 
 with atheris.instrument_imports():
     import urllib3
@@ -26,7 +27,7 @@ with atheris.instrument_imports():
 timeout = urllib3.util.Timeout(connect=1.0, read=1.0)
 urllib_pool = urllib3.PoolManager(timeout=timeout)
 
-PORT = 9011
+PORT = random.randint(9000,9910)
 
 GLOBAL_RESPONSE_MESSAGE = ""
 GLOBAL_RESPONSE_CODE = 0
