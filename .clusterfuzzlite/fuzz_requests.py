@@ -121,7 +121,6 @@ def TestOneInput(input_bytes):
 
 
 if __name__ == "__main__":
-    global PORT
     # Try and get an open port to run our test web server
     # We get crashes when fuzzing without this logic
     for attempt in range(10):
