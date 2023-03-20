@@ -16,19 +16,17 @@
 
 import atheris
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import os
+import random
 import sys
 import threading
 import time
-import random
-import os
-
-with atheris.instrument_imports():
-    import urllib3
+import urllib3
 
 timeout = urllib3.util.Timeout(connect=1.0, read=1.0)
 urllib_pool = urllib3.PoolManager(timeout=timeout)
 
-PORT = 8001
+PORT = 8011
 
 GLOBAL_RESPONSE_MESSAGE = ""
 GLOBAL_RESPONSE_CODE = 0
@@ -119,10 +117,8 @@ def TestOneInput(input_bytes):
     r.data
     r.headers
 
-
-if __name__ == "__main__":
+def main():
     # Try and get an open port to run our test web server
-    # We get crashes when fuzzing without this logic
     for attempt in range(10):
         try:
             PORT = random.randint(8000,9999)
@@ -133,7 +129,10 @@ if __name__ == "__main__":
             pass 
 
     time.sleep(0.5)  # Short delay to start test server
-    
-    atheris.Setup(sys.argv, TestOneInput)
 
+    atheris.instrument_all()
+    atheris.Setup(sys.argv, TestOneInput)
     atheris.Fuzz()
+
+if __name__ == "__main__":
+    main()
